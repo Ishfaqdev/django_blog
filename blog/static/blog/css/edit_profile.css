@@ -1,0 +1,22 @@
+.card {
+  border-radius: 10px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 100px;
+  margin-bottom: 50px;
+}
+
+.card-header {
+  background-color: #fff;
+  border-bottom: none;
+}
+.form-group-gender .form-check {
+  margin-top: 1rem;
+}
+/* CSS for radio buttons */
+.form-check-input:checked {
+  background-color: #007bff; /* Change color to primary when checked */
+}
+
+.form-check-input:checked + .form-check-label {
+  color: #007bff; /* Change color to primary when checked */
+}

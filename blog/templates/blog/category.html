@@ -1,0 +1,39 @@
+{% extends 'blog/base.html' %} {% load static %} 
+{% block title %}Category{% endblock title %} {% block style %}
+{% load tz %}
+<link rel="stylesheet" href="{% static 'blog/css/category.css' %}" />
+{% endblock style %} {% block content %}
+
+<div class="container-custom my-5 mx-5 mt-7 pt-5">
+  <div class="row justify-content-center">
+
+    <div class="col-md-9">
+      <h2>{{ category.name}} Posts</h2>
+
+      <!-- Blog Post 1 -->
+      {% if posts %} 
+      {% for post in posts %}
+      <div class="row my-4">
+        <div class="col-md-4">
+          <img
+            class="img-fluid"
+            src="{{ post.image.url }}"
+            alt="Blog Post 1"
+          />
+        </div>
+        <div class="col-md-8">
+          <h3><a href="{% url 'blog_detail' category_slug=post.category.slug post_slug=post.slug %}">{{ post.title}}</a></h3>
+          <p>{{ post.content|safe|truncatechars:150}}</p>
+          <p><strong>Author:</strong> {{post.author}}</p>
+          <p><strong>Date:</strong> {{post.date_posted|timezone:"Asia/Karachi"|date:"F j, Y, g:i a" }}</p>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <br><p>Sorry!!! No posts found in this category.</p>
+      {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

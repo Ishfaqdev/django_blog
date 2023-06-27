@@ -1,0 +1,20 @@
+{% extends 'blog/base.html' %}
+{% block title %}{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Post Admin</h1>
+    <hr>
+    <h2>{{ post.title }}</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="form-group">
+        <button type="submit" name="approve" class="btn btn-success mr-2">Approve</button>
+        <button type="submit" name="decline" class="btn btn-danger">Decline</button>
+      </div>
+    </form>
+    <a href="{% url 'blog' %}" class="btn btn-primary">Back to Post List</a>
+  </div>
+
+{% endblock content %}

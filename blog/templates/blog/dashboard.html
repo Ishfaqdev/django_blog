@@ -1,0 +1,129 @@
+{% extends 'blog/base.html' %}
+{% load static %} 
+{% load tz %}
+{% block title %}Dashboard{% endblock title %} 
+{% block style %} 
+<link rel="stylesheet" href={% static 'blog/css/dashboard.css' %} >
+{% endblock style %} 
+{% block content %}
+
+
+<!-- Add user profile -->
+
+<div class="container mt-5">
+  <div class="row ">
+    <div class="col-md-12 mt-4">
+      {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}  fade show" role="alert">
+                  {{ message }}
+                  <button type="button" class="close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              {% endfor %}
+              <script>
+                setTimeout(function() {
+                  $('.alert').alert('close');
+                }, 5000);
+              </script>
+            {% endif %}
+    </div>
+  </div>
+</div>
+
+ 
+<div class="container  mb-4">
+  <div class="row">    
+    <div class="col-md-12">
+      <center><h3 style="margin-bottom:20px">Welcome to {% if user.is_superuser %} Admin {% else %} User {% endif %} Dashboard</h3></center>
+      <div class="card" style="box-shadow: 0 8px 10px rgba(0, 0, 0, 0.1);">
+        <div class="card-body">
+          <div class="table-responsive">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="category">Filter by category:</label>
+                    <select class="form-control" id="category">
+                      <option value="all">All Categories</option>
+                      <option value="technology">Technology</option>
+                      <option value="food">Food</option>
+                      <option value="travel">Travel</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Category</th>
+                    <th>Title</th>
+                    {% if user.is_superuser %}  <!-- Only show Author column to superusers -->
+                    <th>Author</th>
+                    {% endif %}
+                    <th>Date</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for post in data %}
+                  <tr>
+                    <td>{{ post.category }}</td>
+                    <td>{{ post.title }}</td>
+                    {% if user.is_superuser %}
+                    <td>{{ post.author }}</td>  <!-- Only show Author to superusers -->
+                    {% endif %}
+                    <td>{{ post.date_posted|timezone:"Asia/Karachi"|date:"F j, Y, g:i a" }}</td>
+                    <td>
+                      <div class="d-flex">
+                        <a href="{% url 'edit_post' post.id %}" class="btn btn-primary btn-sm mr-2 text-center">
+                          <i class="fas fa-edit"></i> Edit Post
+                        </a>
+                        <form method="post" action="{% url 'delete_post' post.id %}">
+                          {% csrf_token %}
+                          <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#confirmDeleteModal{{ post.id }}"><i class="fas fa-trash"></i>  Delete</button>
+                          <!-- Replace 'delete_post' with the name of the URL pattern for your delete view -->
+                          
+                          <!-- Modal -->
+                          <div class="modal fade" id="confirmDeleteModal{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModal{{ post.id }}Label" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="confirmDeleteModal{{ post.id }}Label">Confirm Delete</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  Are you sure you want to delete " <strong>{{ post.title }} </strong>"?
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                  <button type="submit" class="btn btn-danger">Delete</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+                        
+                      </div>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Add Post button fixed to the center of the screen -->
+    <div class="fixed-bottom d-flex justify-content-center align-items-center mb-2">
+      <a href="{% url 'add_post' %}" class="btn btn-primary btn-lg">
+        <i class="fas fa-plus"></i> Add Post
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock content %}

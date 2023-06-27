@@ -1,0 +1,90 @@
+{% extends 'blog/base.html' %} 
+{% load tz %} 
+{% block title %}Blog Detail{% endblock title %} 
+{% block style %} 
+.image-container {
+    height: 200px;
+    overflow: hidden;
+  }
+  .image-container img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+  }
+  .card-img-top {
+    height: 400px; /* adjust the value as needed */
+  }
+  
+{% endblock style %}
+
+<!-- Post Details Section -->
+{% block content %}
+<div class="container my-5 mt-5">
+  <div class="row">
+    <div class="col-md-8 mt-4">
+      <h1 class="card-title mb-2 mt-4">{{ post.title }}</h1>
+      <div class="card-body d-flex">
+        <span class="me-3 mr-3"
+          ><i class="far fa-user"></i> {{ post.author }}</span
+        >
+        <span class="me-3 mr-3"
+          ><i class="far fa-folder"></i> {{ post.category }}</span
+        >
+        <span class="me-3 mr-3"
+          ><i class="far fa-calendar-alt"></i> {{post.date_posted|timezone:"Asia/Karachi"|date:"F j, Y, g:i a" }}</span
+        >
+      </div>
+      <div class="card">
+        <img src="{{ post.image.url }}" class="card-img-top img-fluid" alt="{{post.title}}">
+        <div class="card-body">
+          <p class="card-text text-justify">{{ post.content|safe }}</p>
+        </div>
+      </div>
+
+      <h2 class="mt-5 mb-3">Related Posts</h2>
+      <div class="row">
+        {% for related_post in related_posts %}
+        <div class="col-md-6 mb-4">
+          <div class="card">
+            <div class="image-container">
+              <img
+                src="{{ related_post.image.url }}"
+                class="card-img-top img-fluid"
+                alt="..."
+              />
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">
+                <a href="{% url 'blog_detail' category_slug=related_post.category.slug post_slug=related_post.slug %}">
+                  {{ related_post.title|truncatechars:60 }}
+                </a>
+              </h5>
+              {% comment %} <p class="card-text">{{ related_post.content|safe|truncatechars:100 }}</p> {% endcomment %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-md-4 mt-5">
+        <div class="row mt-5 ml-3">
+            <div class="card mt-5">
+                <div class="card-header bg-primary text-white">
+                <center>Recent Posts</center>
+                </div>
+                <ul class="list-group list-group-flush">
+                {% for recent_post in recent_posts %}
+                <li class="list-group-item">
+                    <a
+                    href="{% url 'blog_detail' category_slug=recent_post.category.slug post_slug=recent_post.slug %}"
+                    >{{ recent_post.title }}</a
+                    >
+                </li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
