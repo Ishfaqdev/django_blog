@@ -144,7 +144,8 @@ def user_login(request):
                 user = authenticate(username=user_name, password=user_password)
                 if user is not None:
                     login(request, user)
-                    messages.success(request, f'Welcome back {user.username}')
+                    messages.success(
+                        request, f'Welcome back <strong> {user.username}</strong>')
                     # update session activity timestamp
                     # request.session['last_activity'] = datetime.now()
                     return HttpResponseRedirect('/dashboard/')
