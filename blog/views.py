@@ -3,7 +3,7 @@ from django.contrib import messages
 from .forms import SignUpForm, LoginForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import PostForm, UserProfileForm
+from .forms import PostForm
 from . models import Post, Category
 from django.db.models import Count
 from django.db.models import F
@@ -123,27 +123,6 @@ def contact(request):
 # About
 def about(request):
     return render(request, 'blog/about.html')
-
-
-# User Profile
-@login_required(login_url='/login')
-def user_profile(request):
-    return render(request, 'blog/profile.html')
-
-
-# Edit Profile
-@login_required(login_url='/login')
-def edit_profile(request):
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES,
-                               instance=request.user.profile)
-        if form.is_valid():
-            form.save()
-            # redirect to success page
-    else:
-        form = UserProfileForm()
-    context = {'form': form}
-    return render(request, 'blog/edit_profile.html', context)
 
 
 # User Logout

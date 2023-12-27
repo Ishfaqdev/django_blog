@@ -3,7 +3,7 @@ from django.core import validators
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UsernameField
 from django.utils.translation import gettext, gettext_lazy as _
-from .models import Post, UserProfile
+from .models import Post
 from ckeditor.widgets import CKEditorWidget
 
 
@@ -94,32 +94,4 @@ class PostForm(forms.ModelForm):
                 'class': 'form-control-file'}),
             'category': forms.Select(attrs={
                 'class': 'form-control'}),
-        }
-
-
-class UserProfileForm(forms.ModelForm):
-    GENDER_CHOICES = [
-        ('M', 'Male'),
-        ('F', 'Female'),
-        ('O', 'Other'),
-    ]
-
-    gender = forms.ChoiceField(choices=GENDER_CHOICES, widget=forms.RadioSelect(
-        attrs={'class': 'form-check-input'}))
-    username = forms.CharField(max_length=30, widget=forms.TextInput(
-        attrs={'class': 'form-control'}))
-
-    class Meta:
-        model = UserProfile
-        fields = ['profile_image', 'gender', 'bio', 'website',
-                  'phone', 'location', 'date_of_birth', 'email']
-        widgets = {
-            'username': forms.TextInput(attrs={'class': 'form-control'}),
-            'profile_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
-            'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
-            'website': forms.URLInput(attrs={'class': 'form-control'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control'}),
-            'location': forms.TextInput(attrs={'class': 'form-control'}),
-            'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control'}),
         }

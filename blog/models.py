@@ -46,19 +46,3 @@ class Gender(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    gender = models.CharField(max_length=10)
-    profile_image = models.ImageField(upload_to='profile_images/', blank=True)
-    bio = models.TextField(max_length=500, blank=True)
-    website = models.URLField(blank=True)
-    phone = models.CharField(max_length=20, blank=True)
-    location = models.CharField(max_length=50, blank=True)
-    date_of_birth = models.DateField(
-        blank=True, null=True, default=date(2000, 1, 1))
-    email = models.EmailField(max_length=254, blank=True)
-
-    def __str__(self):
-        return self.user.username

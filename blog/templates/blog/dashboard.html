@@ -44,12 +44,18 @@
               <div class="row">
                 <div class="col-md-3">
                   <div class="form-group">
-                    <label for="category">Filter by category:</label>
-                    <select class="form-control" id="category">
+                    <label for="category"><strong>Filter by category:</strong></label>
+                    <select class="form-control" id="category" onchange="filterPosts()">
                       <option value="all">All Categories</option>
                       <option value="technology">Technology</option>
                       <option value="food">Food</option>
                       <option value="travel">Travel</option>
+                      <option value="tourism">Tourism</option>
+                      <option value="health">Health</option>
+                      <option value="bussiness">Bussiness</option>
+                      <option value="nature">Nature</option>
+                      <option value="sports">Sports</option>
+                      <option value="politics">Politics</option>
                     </select>
                   </div>
                 </div>
@@ -112,7 +118,10 @@
                   </tr>
                   {% endfor %}
                 </tbody>
-              </table>              
+              </table> 
+              <div id="no-posts-message" class="alert alert-info" style="display: none;">
+                No posts found for the selected category.
+              </div>             
             </div>
           </div>
         </div>
@@ -126,4 +135,33 @@
     </div>
   </div>
 </div>
+
+<script>
+  function filterPosts() {
+    var selectedCategory = document.getElementById('category').value;
+    var rows = document.querySelectorAll('tbody tr');
+
+    var foundPosts = false;
+
+    rows.forEach(function(row) {
+      var categoryCell = row.querySelector('td:first-child');
+      var category = categoryCell.textContent.toLowerCase();
+
+      if (selectedCategory === 'all' || category === selectedCategory) {
+        row.style.display = '';  // Show the row
+        foundPosts = true;
+      } else {
+        row.style.display = 'none';  // Hide the row
+      }
+    });
+
+    // Show a message if no posts are found
+    var noPostsMessage = document.getElementById('no-posts-message');
+    if (foundPosts) {
+      noPostsMessage.style.display = 'none';
+    } else {
+      noPostsMessage.style.display = '';
+    }
+  }
+</script>
 {% endblock content %}
